@@ -47,14 +47,17 @@ var saveTasks = function() {
 
 $(".list-group").on("click", "p", function() {
   var text = $(this)
-  .text()
-  .trim();
+  .text() //gets inner text content of current element
+  .trim(); //removes whitespace before/after
   console.log(this);
 
-  var textInput = $("<textarea>")
+//create new <textarea> element, vs. $("textarea"), which tells jQuery to find existing <textarea> elements
+  var textInput = $("<textarea>") 
   $(this).replaceWith(textInput)
   .addClass("form-control")
   .val(text);
+
+  //automatically highlight input box so user doesn't have to click on the <textarea> to begin editing. highlighted element is considered in focus.
   textInput.trigger("focus");
 });
 
@@ -75,10 +78,18 @@ var index = $(this)
   .closest(".list-group-item")
   .index();
 
+  //we don't know the task's values ahead of time, so use variable names as placeholders:
+
   tasks[status][index].text = text;
+
+  //tasks = object
+  //tasks[status] returns an array (e.g., toDo)
+  //tasks[status][index] returns the object at the given index in the array
+
+  //updating this tasks object was necessary for localStorage, so we call saveTasks() immediately afterwards
   saveTasks();
 
-//recreate p element
+//recreate p element (convert <textarea> back into <p> element)
 var taskP = $("<p>")
   .addClass("m-1")
   .text(text);
